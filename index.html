@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <title>遗落的屏幕 — 悬疑解谜</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/win7.css">
+  <link rel="stylesheet" href="css/prologue.css">
+  <link rel="stylesheet" href="css/ios-phone.css">
+  <link rel="stylesheet" href="css/websites.css">
+  <link rel="stylesheet" href="css/apps-extra.css">
+  <link rel="stylesheet" href="css/ending.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/prologue/prologue-1-package.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/photos/photo-1-sunset.jpg">
+</head>
+<body>
+  <!-- 标题画面 -->
+  <div id="title-screen" class="screen active">
+    <h1 class="title-main">遗落的屏幕</h1>
+    <p class="title-sub">林雨失踪事件</p>
+    <div class="preload-status" id="preload-status">
+      <div class="preload-bar-track">
+        <div class="preload-bar-fill" id="preload-bar-fill"></div>
+      </div>
+      <p class="preload-label" id="preload-label">正在预加载图片资源… 0%</p>
+    </div>
+    <button type="button" class="title-start" id="title-start-btn" disabled>加载中…</button>
+    <button type="button" class="title-skip" id="title-skip-btn" disabled>跳过剧情，直接进入</button>
+  </div>
+
+  <!-- 漫画过场 -->
+  <div id="prologue-screen" class="screen">
+    <div class="prologue-viewer" id="prologue-viewer">
+      <button type="button" class="prologue-skip" id="prologue-skip">跳过剩余剧情</button>
+      <div class="prologue-image-wrap" id="prologue-image-wrap">
+        <img class="prologue-image" id="prologue-image" alt="" hidden>
+        <div class="prologue-vignette"></div>
+      </div>
+      <div class="prologue-dialogue">
+        <div class="prologue-speaker" id="prologue-speaker"></div>
+        <div class="prologue-text" id="prologue-text"></div>
+        <div class="prologue-controls">
+          <button type="button" class="prologue-prev" id="prologue-prev" disabled>◀ 上一页</button>
+          <div class="prologue-dots" id="prologue-dots"></div>
+          <button type="button" class="prologue-next" id="prologue-next">下一页 ▶</button>
+        </div>
+        <p class="prologue-hint">点击继续 · ← 上一页 · 底部圆点可跳转</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 启动画面 -->
+  <div id="boot-screen" class="screen">
+    <div class="boot-content">
+      <div class="boot-flag" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div class="boot-logo">Windows<span>7</span></div>
+      <div class="boot-bar"><div class="boot-bar-fill" id="boot-fill"></div></div>
+      <p class="boot-text" id="boot-text">正在启动 Windows...</p>
+    </div>
+    <div class="boot-glitch" aria-hidden="true"></div>
+  </div>
+
+  <!-- 登录画面 -->
+  <div id="login-screen" class="screen">
+    <div class="login-bg win7-wallpaper"></div>
+    <div class="login-win7">
+      <div class="login-user-tile">
+        <div class="login-avatar">雨</div>
+        <h1>林雨</h1>
+        <p class="login-hint">林雨的电脑。屏幕还亮着。</p>
+      </div>
+      <form id="login-form" class="login-form-win7" autocomplete="off">
+        <input type="password" id="login-password" placeholder="密码" maxlength="20">
+        <button type="submit" class="btn-win7">登录</button>
+      </form>
+      <p class="login-error" id="login-error"></p>
+      <button type="button" class="login-package-clue" id="login-package-clue">📎 查看包裹里的物业单复印件</button>
+      <p class="login-clue-hint" id="login-clue-hint" hidden></p>
+    </div>
+    <div class="login-os-label">Windows 7 家庭普通版</div>
+  </div>
+
+  <!-- 桌面 -->
+  <div id="desktop" class="screen">
+    <div class="desktop-wallpaper win7-wallpaper"></div>
+    <div class="desktop-icons" id="desktop-icons"></div>
+    <div class="window-layer" id="window-layer"></div>
+    <div class="phone-dock" id="phone-dock" hidden>
+      <button class="phone-toggle" id="phone-toggle" title="打开手机">
+        <span class="phone-icon">📱</span>
+        <span class="phone-badge" id="phone-badge">1</span>
+      </button>
+    </div>
+    <div class="taskbar">
+      <button type="button" class="taskbar-start" id="start-btn" title="开始" aria-label="开始">
+        <span class="start-orb" aria-hidden="true"></span>
+      </button>
+      <div class="taskbar-apps" id="taskbar-apps"></div>
+      <div class="taskbar-tray">
+        <div class="tray-icons" aria-hidden="true">
+          <span class="tray-icon">🔊</span>
+          <span class="tray-icon">📶</span>
+          <span class="tray-icon">🔋</span>
+        </div>
+        <div class="taskbar-clock" id="taskbar-clock">
+          <span class="clock-time">00:00</span>
+          <span class="clock-date">2026/9/15</span>
+        </div>
+      </div>
+    </div>
+    <div class="start-menu" id="start-menu" hidden>
+      <div class="start-menu-inner">
+        <div class="start-menu-left">
+          <div class="start-search">搜索程序和文件</div>
+          <div class="start-menu-apps" id="start-menu-apps"></div>
+        </div>
+        <div class="start-menu-right">
+          <div class="start-user">
+            <div class="start-user-avatar">雨</div>
+            <span>林雨</span>
+          </div>
+          <div class="start-menu-links">
+            <div class="start-link">文档</div>
+            <div class="start-link">图片</div>
+            <div class="start-link">音乐</div>
+            <div class="start-link">计算机</div>
+            <div class="start-link">控制面板</div>
+          </div>
+          <button type="button" class="start-shutdown" id="shutdown-btn">关机</button>
+        </div>
+      </div>
+    </div>
+    <div class="notification-area" id="notifications"></div>
+  </div>
+
+  <!-- 手机界面 (iOS) -->
+  <div id="phone-screen" class="screen">
+    <div class="iphone-scene">
+      <button type="button" class="iphone-back-pc" id="phone-back-desktop">
+        <span class="iphone-back-pc-icon">💻</span> 返回电脑
+      </button>
+      <div class="iphone-device">
+        <div class="iphone-bezel">
+          <div class="iphone-island" aria-hidden="true"></div>
+          <div class="iphone-display">
+            <div class="ios-status">
+              <span class="ios-status-time" id="phone-time">23:47</span>
+              <div class="ios-status-right">
+                <span class="ios-signal" aria-hidden="true"></span>
+                <span class="ios-wifi" aria-hidden="true"></span>
+                <span class="ios-battery" aria-hidden="true"></span>
+              </div>
+            </div>
+
+            <div class="ios-lockscreen" id="phone-lock">
+              <div class="ios-wallpaper ios-wallpaper-lock"></div>
+              <div class="ios-lock-content">
+                <div class="ios-lock-date" id="phone-lock-date">3月15日 星期日</div>
+                <div class="ios-lock-clock" id="phone-lock-time">23:47</div>
+                <div class="ios-passcode-area">
+                  <p class="ios-passcode-label">输入密码</p>
+                  <div class="ios-passcode-dots" id="ios-passcode-dots">
+                    <span></span><span></span><span></span><span></span>
+                  </div>
+                  <p class="ios-passcode-error" id="phone-lock-error"></p>
+                  <input type="tel" id="phone-password" class="ios-passcode-hidden" maxlength="4" autocomplete="off" inputmode="numeric">
+                  <div class="ios-keypad" id="ios-keypad"></div>
+                </div>
+              </div>
+              <div class="ios-lock-bottom-hint">紧急呼叫 · 相机</div>
+            </div>
+
+            <div class="ios-homescreen" id="phone-home" hidden>
+              <div class="ios-wallpaper ios-wallpaper-home"></div>
+              <div class="ios-home-grid" id="phone-apps"></div>
+              <div class="ios-dock-wrap">
+                <div class="ios-dock" id="phone-dock-apps"></div>
+              </div>
+              <div class="ios-home-indicator" aria-hidden="true"></div>
+            </div>
+
+            <div class="ios-app-screen" id="phone-app-view" hidden>
+              <div class="ios-app-nav">
+                <button type="button" class="ios-app-nav-back" id="phone-app-back">‹ 主屏幕</button>
+                <span class="ios-app-nav-title" id="phone-app-title">应用</span>
+              </div>
+              <div class="ios-app-content" id="phone-app-content"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 结局 -->
+  <div id="ending-screen" class="screen">
+    <div class="ending-blood-fx" id="ending-blood-fx" aria-hidden="true">
+      <div class="blood-core"></div>
+      <div class="blood-edge blood-edge-top"></div>
+      <div class="blood-edge blood-edge-bottom"></div>
+      <div class="blood-edge blood-edge-left"></div>
+      <div class="blood-edge blood-edge-right"></div>
+      <div class="blood-drip blood-drip-1"></div>
+      <div class="blood-drip blood-drip-2"></div>
+      <div class="blood-drip blood-drip-3"></div>
+      <div class="blood-drip blood-drip-4"></div>
+      <div class="blood-veil"></div>
+    </div>
+    <div class="ending-stage" id="ending-stage">
+      <div class="ending-content" id="ending-content"></div>
+      <button type="button" class="ending-restart" id="restart-btn" hidden>重新开始</button>
+    </div>
+  </div>
+
+  <!-- 全局遮罩/惊吓 -->
+  <div id="scare-overlay" class="scare-overlay" hidden aria-hidden="true">
+    <img class="scare-face-img" id="scare-face-img" alt="" hidden>
+    <div class="scare-face" id="scare-face" hidden>👁️</div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/prologue.js"></script>
+  <script src="js/preload.js"></script>
+  <script src="js/sfx.js"></script>
+  <script src="js/scare.js"></script>
+  <script src="js/tasks.js"></script>
+  <script src="js/websites.js"></script>
+  <script src="js/browser.js"></script>
+  <script src="js/apps.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

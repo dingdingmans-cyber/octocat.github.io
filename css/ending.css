@@ -1,0 +1,279 @@
+/* ===== 结局：抖动 → 血液外涌 → 血红浸没 ===== */
+#ending-screen {
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.ending-blood-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.ending-blood-fx.active {
+  opacity: 1;
+}
+
+/* 中心血液喷涌向外扩散 */
+.blood-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    #c41e1e 0%,
+    #8b0000 35%,
+    #5a0000 60%,
+    #3a0000 80%);
+  box-shadow: 0 0 60px rgba(180, 0, 0, 0.6);
+  opacity: 0;
+}
+
+.ending-blood-fx.active .blood-core {
+  animation: bloodCoreBurst 2.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* 四边血液往里涌 */
+.blood-edge {
+  position: absolute;
+  background: linear-gradient(var(--dir), transparent, #6b0000 40%, #8b0000 70%, #a01010);
+  opacity: 0;
+  filter: blur(2px);
+}
+
+.blood-edge-top {
+  --dir: to bottom;
+  top: 0; left: 0; right: 0;
+  height: 0;
+}
+
+.blood-edge-bottom {
+  --dir: to top;
+  bottom: 0; left: 0; right: 0;
+  height: 0;
+}
+
+.blood-edge-left {
+  --dir: to right;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+}
+
+.blood-edge-right {
+  --dir: to left;
+  right: 0; top: 0; bottom: 0;
+  width: 0;
+}
+
+.ending-blood-fx.active .blood-edge-top {
+  animation: bloodEdgeDown 2.2s 0.15s ease-in forwards;
+}
+.ending-blood-fx.active .blood-edge-bottom {
+  animation: bloodEdgeUp 2.2s 0.2s ease-in forwards;
+}
+.ending-blood-fx.active .blood-edge-left {
+  animation: bloodEdgeRight 2.2s 0.1s ease-in forwards;
+}
+.ending-blood-fx.active .blood-edge-right {
+  animation: bloodEdgeLeft 2.2s 0.25s ease-in forwards;
+}
+
+/* 滴落液滴 */
+.blood-drip {
+  position: absolute;
+  width: 14px;
+  height: 0;
+  background: linear-gradient(180deg, #9a1010, #5a0000);
+  border-radius: 0 0 8px 8px;
+  filter: blur(0.5px);
+  opacity: 0;
+}
+
+.blood-drip-1 { left: 18%; top: 0; }
+.blood-drip-2 { left: 42%; top: 0; animation-delay: 0.1s; }
+.blood-drip-3 { left: 67%; top: 0; animation-delay: 0.2s; }
+.blood-drip-4 { left: 85%; top: 0; animation-delay: 0.05s; }
+
+.ending-blood-fx.active .blood-drip {
+  animation: bloodDripFall 1.8s ease-in forwards;
+}
+
+/* 最终血幕全覆盖 */
+.blood-veil {
+  position: absolute;
+  inset: 0;
+  background: #3a0808;
+  opacity: 0;
+}
+
+.ending-blood-fx.flooded .blood-veil {
+  animation: bloodVeilIn 1.2s ease-out forwards;
+}
+
+/* 抖动阶段 — 作用于整个结局层 */
+#ending-screen.ending-shake {
+  animation: endingViolentShake 0.07s linear infinite;
+}
+
+#ending-screen.ending-shake .ending-stage {
+  filter: contrast(1.2) brightness(0.85);
+}
+
+.ending-stage {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.ending-content {
+  max-width: 620px;
+  text-align: center;
+  line-height: 2;
+  font-size: 1rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+  pointer-events: none;
+}
+
+.ending-content.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.ending-content h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #ffaaaa;
+  text-shadow: 0 0 20px rgba(255, 80, 80, 0.5);
+}
+
+#ending-screen.ending-flooded {
+  background: #3a0808;
+}
+
+#ending-screen.ending-flooded .ending-content {
+  color: #f5d8d8;
+}
+
+#ending-screen.ending-flooded .ending-content strong {
+  color: #ffcccc;
+}
+
+#ending-screen.ending-flooded .creepy-text {
+  color: #ff6666 !important;
+  text-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
+}
+
+.ending-restart {
+  margin-top: 2.5rem;
+  padding: 0.75rem 2rem;
+  border: 1px solid rgba(255, 150, 150, 0.35);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 200, 200, 0.7);
+  cursor: pointer;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 1s ease 0.3s, border-color 0.2s, color 0.2s;
+  z-index: 4;
+}
+
+.ending-restart.visible {
+  opacity: 1;
+}
+
+.ending-restart:hover {
+  border-color: #ff8888;
+  color: #ffe0e0;
+}
+
+/* ===== 动画关键帧 ===== */
+@keyframes endingViolentShake {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  10%  { transform: translate(-14px, 9px) rotate(-1.8deg); }
+  20%  { transform: translate(12px, -11px) rotate(1.5deg); }
+  30%  { transform: translate(-10px, -8px) rotate(-1.2deg); }
+  40%  { transform: translate(15px, 6px) rotate(1.8deg); }
+  50%  { transform: translate(-8px, 12px) rotate(-0.8deg); }
+  60%  { transform: translate(11px, -7px) rotate(1.3deg); }
+  70%  { transform: translate(-13px, 5px) rotate(-1.6deg); }
+  80%  { transform: translate(9px, -10px) rotate(0.9deg); }
+  90%  { transform: translate(-6px, 8px) rotate(-1.1deg); }
+  100% { transform: translate(5px, -4px) rotate(0.5deg); }
+}
+
+@keyframes bloodCoreBurst {
+  0%   { width: 0; height: 0; opacity: 0; }
+  8%   { width: 40px; height: 40px; opacity: 1; }
+  100% { width: 280vmax; height: 280vmax; opacity: 1; }
+}
+
+@keyframes bloodEdgeDown {
+  0%   { height: 0; opacity: 0; }
+  15%  { opacity: 1; }
+  100% { height: 55%; opacity: 1; }
+}
+
+@keyframes bloodEdgeUp {
+  0%   { height: 0; opacity: 0; }
+  15%  { opacity: 1; }
+  100% { height: 55%; opacity: 1; }
+}
+
+@keyframes bloodEdgeRight {
+  0%   { width: 0; opacity: 0; }
+  15%  { opacity: 1; }
+  100% { width: 50%; opacity: 1; }
+}
+
+@keyframes bloodEdgeLeft {
+  0%   { width: 0; opacity: 0; }
+  15%  { opacity: 1; }
+  100% { width: 50%; opacity: 1; }
+}
+
+@keyframes bloodDripFall {
+  0%   { height: 0; opacity: 0; }
+  20%  { opacity: 0.9; }
+  100% { height: 100vh; opacity: 0.85; }
+}
+
+@keyframes bloodVeilIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  .ending-content {
+    padding: 0 1rem;
+    font-size: 0.92rem;
+    line-height: 1.85;
+  }
+  .ending-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .ending-stage {
+    padding: 1.25rem;
+  }
+}
